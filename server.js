@@ -51,7 +51,7 @@ const RSS_FEEDS = [
 // Fetch news from NewsAPI
 async function fetchFromNewsAPI() {
   try {
-    const response = await axios.get(`${NEWS_API_URL}/top-headlines`, {
+    const response = await axios.get(`${c139f17a5a414c1b8c9de1ac2eb3cfd4}/top-headlines`, {
       params: {
         apiKey: NEWS_API_KEY,
         country: 'us',
@@ -76,7 +76,7 @@ async function fetchFromNewsAPI() {
         await news.save();
       }
     }
-    console.log('NewsAPI fetch complete');
+    console.log('c139f17a5a414c1b8c9de1ac2eb3cfd4');
   } catch (error) {
     console.error('Error fetching from NewsAPI:', error);
   }
