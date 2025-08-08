@@ -1,0 +1,1397 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoNews - Trending News Automated</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #1a237e;
+            --secondary-color: #3949ab;
+            --accent-color: #ff4081;
+            --text-color: #212121;
+            --light-bg: #f5f5f5;
+            --border-color: #e0e0e0;
+            --card-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            --hover-shadow: 0 10px 15px rgba(0,0,0,0.1);
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Roboto', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: #fff;
+            overflow-x: hidden;
+        }
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        }
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-size: 2rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .logo i {
+            margin-right: 10px;
+            color: var(--accent-color);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        nav ul li {
+            margin-left: 25px;
+        }
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        nav ul li a:hover {
+            color: var(--accent-color);
+        }
+        nav ul li a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--accent-color);
+            transition: width 0.3s ease;
+        }
+        nav ul li a:hover:after {
+            width: 100%;
+        }
+        /* Google Ad - Header */
+        .ad-header {
+            background-color: var(--light-bg);
+            padding: 10px 0;
+            text-align: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .ad-placeholder {
+            background-color: #e0e0e0;
+            color: #757575;
+            padding: 15px;
+            border-radius: 4px;
+            display: inline-block;
+            font-size: 14px;
+            max-width: 728px;
+            width: 100%;
+        }
+        /* Breaking News Ticker */
+        .breaking-news {
+            background-color: var(--accent-color);
+            color: white;
+            padding: 8px 0;
+            overflow: hidden;
+            position: relative;
+        }
+        .breaking-news-container {
+            display: flex;
+            align-items: center;
+        }
+        .breaking-news-label {
+            background-color: #d81b60;
+            padding: 5px 15px;
+            font-weight: bold;
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            animation: flash 2s infinite;
+        }
+        @keyframes flash {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        .breaking-news-label i {
+            margin-right: 5px;
+        }
+        .breaking-news-content {
+            white-space: nowrap;
+            overflow: hidden;
+            position: relative;
+            flex: 1;
+        }
+        .breaking-news-ticker {
+            display: inline-block;
+            padding-left: 100%;
+            animation: ticker 30s linear infinite;
+        }
+        @keyframes ticker {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(-100%, 0); }
+        }
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 30px;
+            margin: 30px 0;
+        }
+        /* Featured Article */
+        .featured-article {
+            margin-bottom: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            background-color: white;
+        }
+        .featured-article:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--hover-shadow);
+        }
+        .featured-article img {
+            width: 100%;
+            height: 450px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .featured-article:hover img {
+            transform: scale(1.03);
+        }
+        .featured-article-content {
+            padding: 25px;
+        }
+        .article-category {
+            color: var(--secondary-color);
+            font-weight: bold;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            padding: 5px 12px;
+            background-color: rgba(57, 73, 171, 0.1);
+            border-radius: 20px;
+        }
+        .featured-article-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+        .featured-article:hover h2 {
+            color: var(--accent-color);
+        }
+        .article-meta {
+            display: flex;
+            margin-bottom: 20px;
+            font-size: 0.95rem;
+            color: #757575;
+        }
+        .article-meta span {
+            margin-right: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .article-meta i {
+            margin-right: 8px;
+            color: var(--secondary-color);
+        }
+        /* Article Grid */
+        .article-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+        .article-card {
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--hover-shadow);
+        }
+        .article-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        .article-card:hover img {
+            transform: scale(1.05);
+        }
+        .article-card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        .article-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            line-height: 1.3;
+            color: var(--primary-color);
+            transition: color 0.3s ease;
+        }
+        .article-card:hover h3 {
+            color: var(--accent-color);
+        }
+        .article-card p {
+            color: #616161;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+            flex: 1;
+        }
+        .read-more {
+            color: var(--secondary-color);
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+        .read-more i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+        .read-more:hover {
+            color: var(--accent-color);
+        }
+        .read-more:hover i {
+            transform: translateX(5px);
+        }
+        /* Google Ad - In Content */
+        .ad-in-content {
+            margin: 40px 0;
+            text-align: center;
+        }
+        /* Sidebar */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 25px;
+        }
+        .sidebar-section {
+            background-color: white;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: var(--card-shadow);
+            transition: all 0.3s ease;
+        }
+        .sidebar-section:hover {
+            box-shadow: var(--hover-shadow);
+        }
+        .sidebar-section h3 {
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--border-color);
+            color: var(--primary-color);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+        .sidebar-section h3 i {
+            margin-right: 10px;
+            color: var(--accent-color);
+        }
+        .trending-list {
+            list-style: none;
+        }
+        .trending-list li {
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: flex-start;
+            transition: all 0.3s ease;
+        }
+        .trending-list li:hover {
+            padding-left: 10px;
+        }
+        .trending-list li:last-child {
+            border-bottom: none;
+        }
+        .trending-number {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-weight: bold;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        /* Categories */
+        .category-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .category-tag {
+            background-color: var(--light-bg);
+            padding: 10px 18px;
+            border-radius: 30px;
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            color: var(--text-color);
+            border: 1px solid transparent;
+        }
+        .category-tag:hover {
+            background-color: var(--secondary-color);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+        }
+        /* Newsletter */
+        .newsletter-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .newsletter-form input {
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .newsletter-form input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(57, 73, 171, 0.2);
+        }
+        .newsletter-form button {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 12px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        .newsletter-form button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        /* Google Ad - Sidebar */
+        .ad-sidebar {
+            margin-top: 15px;
+        }
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            padding: 50px 0 20px;
+            margin-top: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+        }
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        .footer-section h4 {
+            margin-bottom: 20px;
+            font-size: 1.3rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background-color: var(--accent-color);
+        }
+        .footer-section ul {
+            list-style: none;
+        }
+        .footer-section ul li {
+            margin-bottom: 12px;
+        }
+        .footer-section ul li a {
+            color: rgba(255,255,255,0.8);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        .footer-section ul li a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+        .footer-bottom {
+            text-align: center;
+            padding-top: 25px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.95rem;
+            color: rgba(255,255,255,0.7);
+        }
+        /* Automation Badge */
+        .automation-badge {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            padding: 12px 20px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            z-index: 100;
+            font-weight: 500;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .automation-badge i {
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+        /* Loading Animation */
+        .loading-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+        }
+        .loading-spinner {
+            width: 60px;
+            height: 60px;
+            border: 5px solid rgba(0,0,0,0.1);
+            border-radius: 50%;
+            border-top-color: var(--secondary-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        /* Error Message */
+        .error-message {
+            background-color: #ffebee;
+            color: #c62828;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            text-align: center;
+            display: none;
+        }
+        /* Configuration Panel */
+        .config-panel {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            padding: 20px;
+            width: 300px;
+            z-index: 100;
+            display: none;
+        }
+        .config-panel h3 {
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+        .config-panel .form-group {
+            margin-bottom: 15px;
+        }
+        .config-panel label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        .config-panel input, .config-panel select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: 0.95rem;
+        }
+        .config-panel button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-right: 10px;
+        }
+        .config-panel button.cancel {
+            background-color: #757575;
+        }
+        /* Source Attribution */
+        .source-attribution {
+            font-size: 0.85rem;
+            color: #757575;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        /* Responsive Design */
+        @media (max-width: 992px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-article img {
+                height: 350px;
+            }
+        }
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px 10px;
+            }
+            
+            .featured-article img {
+                height: 250px;
+            }
+            
+            .featured-article-content h2 {
+                font-size: 1.8rem;
+            }
+            
+            .article-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .automation-badge {
+                bottom: 10px;
+                right: 10px;
+                padding: 10px 15px;
+                font-size: 0.9rem;
+            }
+            
+            .config-panel {
+                width: 90%;
+                right: 5%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-newspaper"></i>
+                AutoNews
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#" class="nav-link active" data-category="all">Home</a></li>
+                    <li><a href="#" class="nav-link" data-category="politics">Politics</a></li>
+                    <li><a href="#" class="nav-link" data-category="technology">Technology</a></li>
+                    <li><a href="#" class="nav-link" data-category="business">Business</a></li>
+                    <li><a href="#" class="nav-link" data-category="entertainment">Entertainment</a></li>
+                    <li><a href="#" class="nav-link" data-category="sports">Sports</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <!-- Google Ad - Header -->
+    <div class="ad-header">
+        <div class="container">
+            <div class="ad-placeholder">
+                <!-- Google AdSense Code for Leaderboard (728x90) -->
+                <ins class="adsbygoogle"
+                     style="display:inline-block;width:728px;height:90px"
+                     data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                     data-ad-slot="XXXXXXXXXX"></ins>
+                <script>
+                     (adsbygoogle = window.adsbygoogle || []).push({});
+                </script>
+            </div>
+        </div>
+    </div>
+    <!-- Breaking News Ticker -->
+    <div class="breaking-news">
+        <div class="container breaking-news-container">
+            <div class="breaking-news-label">
+                <i class="fas fa-bolt"></i> BREAKING
+            </div>
+            <div class="breaking-news-content">
+                <div class="breaking-news-ticker" id="breaking-news-ticker">
+                    Loading breaking news...
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Main Content -->
+    <div class="container">
+        <div class="main-content">
+            <!-- Left Column -->
+            <div class="left-column">
+                <!-- Featured Article -->
+                <div class="featured-article" id="featured-article">
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+                <!-- Google Ad - In Content -->
+                <div class="ad-in-content">
+                    <div class="ad-placeholder">
+                        <!-- Google AdSense Code for Large Rectangle (336x280) -->
+                        <ins class="adsbygoogle"
+                             style="display:inline-block;width:336px;height:280px"
+                             data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                             data-ad-slot="XXXXXXXXXX"></ins>
+                        <script>
+                             (adsbygoogle = window.adsbygoogle || []).push({});
+                        </script>
+                    </div>
+                </div>
+                <!-- Error Message -->
+                <div class="error-message" id="error-message">
+                    Failed to load news. Please check your internet connection or try again later.
+                </div>
+                <!-- Article Grid -->
+                <div class="article-grid" id="article-grid">
+                    <!-- Articles will be loaded here by JavaScript -->
+                    <div class="loading-container">
+                        <div class="loading-spinner"></div>
+                    </div>
+                </div>
+            </div>
+            <!-- Sidebar -->
+            <div class="sidebar">
+                <!-- Trending Section -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-fire"></i> Trending Now</h3>
+                    <ul class="trending-list" id="trending-list">
+                        <!-- Trending items will be loaded here by JavaScript -->
+                        <div class="loading-container">
+                            <div class="loading-spinner" style="width: 40px; height: 40px;"></div>
+                        </div>
+                    </ul>
+                </div>
+                <!-- Google Ad - Sidebar -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-ad"></i> Advertisement</h3>
+                    <div class="ad-sidebar">
+                        <div class="ad-placeholder">
+                            <!-- Google AdSense Code for Medium Rectangle (300x250) -->
+                            <ins class="adsbygoogle"
+                                 style="display:inline-block;width:300px;height:250px"
+                                 data-ad-client="ca-pub-XXXXXXXXXXXXXXXX"
+                                 data-ad-slot="XXXXXXXXXX"></ins>
+                            <script>
+                                 (adsbygoogle = window.adsbygoogle || []).push({});
+                            </script>
+                        </div>
+                    </div>
+                </div>
+                <!-- Categories Section -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-list"></i> Categories</h3>
+                    <div class="category-list">
+                        <div class="category-tag" data-category="all">All News</div>
+                        <div class="category-tag" data-category="general">General</div>
+                        <div class="category-tag" data-category="politics">Politics</div>
+                        <div class="category-tag" data-category="technology">Technology</div>
+                        <div class="category-tag" data-category="business">Business</div>
+                        <div class="category-tag" data-category="entertainment">Entertainment</div>
+                        <div class="category-tag" data-category="sports">Sports</div>
+                        <div class="category-tag" data-category="science">Science</div>
+                        <div class="category-tag" data-category="health">Health</div>
+                    </div>
+                </div>
+                <!-- RSS Feeds Section -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-rss"></i> News Sources</h3>
+                    <ul class="trending-list" id="rss-sources">
+                        <li>
+                            <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                                <i class="fas fa-rss" style="color: var(--secondary-color);"></i>
+                            </div>
+                            <div>BBC News</div>
+                        </li>
+                        <li>
+                            <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                                <i class="fas fa-rss" style="color: var(--secondary-color);"></i>
+                            </div>
+                            <div>CNN</div>
+                        </li>
+                        <li>
+                            <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                                <i class="fas fa-rss" style="color: var(--secondary-color);"></i>
+                            </div>
+                            <div>Reuters</div>
+                        </li>
+                        <li>
+                            <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0;">
+                                <i class="fas fa-rss" style="color: var(--secondary-color);"></i>
+                            </div>
+                            <div>The Guardian</div>
+                        </li>
+                    </ul>
+                </div>
+                <!-- Newsletter Section -->
+                <div class="sidebar-section">
+                    <h3><i class="fas fa-envelope"></i> Newsletter</h3>
+                    <p>Subscribe to our automated newsletter for the latest trending news.</p>
+                    <form class="newsletter-form" id="newsletter-form">
+                        <input type="email" placeholder="Your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Automation Badge -->
+    <div class="automation-badge" id="automation-badge">
+        <i class="fas fa-robot"></i>
+        <span>Fully Automated</span>
+    </div>
+    <!-- Configuration Panel -->
+    <div class="config-panel" id="config-panel">
+        <h3>News Automation Settings</h3>
+        <div class="form-group">
+            <label for="news-api-key">News API Key:</label>
+            <input type="text" id="news-api-key" placeholder="Enter your API key">
+        </div>
+        <div class="form-group">
+            <label for="refresh-interval">Refresh Interval (minutes):</label>
+            <select id="refresh-interval">
+                <option value="5">5 minutes</option>
+                <option value="15" selected>15 minutes</option>
+                <option value="30">30 minutes</option>
+                <option value="60">1 hour</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label for="country">Country:</label>
+            <select id="country">
+                <option value="us" selected>United States</option>
+                <option value="gb">United Kingdom</option>
+                <option value="ca">Canada</option>
+                <option value="au">Australia</option>
+                <option value="in">India</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <button id="save-settings">Save Settings</button>
+            <button id="cancel-settings" class="cancel">Cancel</button>
+        </div>
+    </div>
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h4>About AutoNews</h4>
+                    <p>AutoNews is a fully automated news platform that delivers trending news without human intervention. Our advanced AI systems gather, analyze, and publish news 24/7.</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="#" class="footer-category-link" data-category="politics">Politics</a></li>
+                        <li><a href="#" class="footer-category-link" data-category="technology">Technology</a></li>
+                        <li><a href="#" class="footer-category-link" data-category="business">Business</a></li>
+                        <li><a href="#" class="footer-category-link" data-category="entertainment">Entertainment</a></li>
+                        <li><a href="#" class="footer-category-link" data-category="sports">Sports</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h4>Connect With Us</h4>
+                    <ul>
+                        <li><a href="#"><i class="fab fa-facebook"></i> Facebook</a></li>
+                        <li><a href="#"><i class="fab fa-twitter"></i> Twitter</a></li>
+                        <li><a href="#"><i class="fab fa-instagram"></i> Instagram</a></li>
+                        <li><a href="#"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2023 AutoNews. All rights reserved. Fully automated news platform.</p>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Configuration
+        let config = {
+            apiKey: 'demo-key', // Replace with your actual NewsAPI key
+            refreshInterval: 15, // minutes
+            country: 'us',
+            currentCategory: 'all',
+            rssFeeds: [
+                'https://feeds.bbci.co.uk/news/rss.xml',
+                'http://rss.cnn.com/rss/cnn_topstories.rss',
+                'https://feeds.reuters.com/reuters/topNews',
+                'https://www.theguardian.com/international/rss'
+            ]
+        };
+
+        // DOM Elements
+        const featuredArticle = document.getElementById('featured-article');
+        const articleGrid = document.getElementById('article-grid');
+        const trendingList = document.getElementById('trending-list');
+        const breakingNewsTicker = document.getElementById('breaking-news-ticker');
+        const errorMessage = document.getElementById('error-message');
+        const automationBadge = document.getElementById('automation-badge');
+        const configPanel = document.getElementById('config-panel');
+        const newsletterForm = document.getElementById('newsletter-form');
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load saved settings
+            loadSettings();
+            
+            // Set up event listeners
+            setupEventListeners();
+            
+            // Initial news load
+            loadAllNews();
+            
+            // Set up automatic refresh
+            setupAutoRefresh();
+        });
+
+        // Load settings from localStorage
+        function loadSettings() {
+            const savedSettings = localStorage.getItem('autonews-config');
+            if (savedSettings) {
+                const parsed = JSON.parse(savedSettings);
+                config = { ...config, ...parsed };
+                
+                // Update UI with loaded settings
+                document.getElementById('news-api-key').value = config.apiKey || '';
+                document.getElementById('refresh-interval').value = config.refreshInterval;
+                document.getElementById('country').value = config.country;
+            }
+        }
+
+        // Save settings to localStorage
+        function saveSettings() {
+            config.apiKey = document.getElementById('news-api-key').value;
+            config.refreshInterval = parseInt(document.getElementById('refresh-interval').value);
+            config.country = document.getElementById('country').value;
+            
+            localStorage.setItem('autonews-config', JSON.stringify(config));
+            
+            // Hide config panel
+            configPanel.style.display = 'none';
+            
+            // Reload news with new settings
+            loadAllNews();
+            
+            // Reset auto refresh with new interval
+            setupAutoRefresh();
+        }
+
+        // Set up event listeners
+        function setupEventListeners() {
+            // Navigation links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    filterByCategory(category);
+                    
+                    // Update active state
+                    document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                    this.classList.add('active');
+                });
+            });
+            
+            // Category tags
+            document.querySelectorAll('.category-tag').forEach(tag => {
+                tag.addEventListener('click', function() {
+                    const category = this.getAttribute('data-category');
+                    filterByCategory(category);
+                });
+            });
+            
+            // Footer category links
+            document.querySelectorAll('.footer-category-link').forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const category = this.getAttribute('data-category');
+                    filterByCategory(category);
+                });
+            });
+            
+            // Automation badge click
+            automationBadge.addEventListener('click', function() {
+                configPanel.style.display = configPanel.style.display === 'block' ? 'none' : 'block';
+            });
+            
+            // Save settings button
+            document.getElementById('save-settings').addEventListener('click', saveSettings);
+            
+            // Cancel settings button
+            document.getElementById('cancel-settings').addEventListener('click', function() {
+                configPanel.style.display = 'none';
+                // Reset form to current values
+                document.getElementById('news-api-key').value = config.apiKey || '';
+                document.getElementById('refresh-interval').value = config.refreshInterval;
+                document.getElementById('country').value = config.country;
+            });
+            
+            // Newsletter form
+            newsletterForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const email = this.querySelector('input[type="email"]').value;
+                
+                // Create a success message
+                const successMessage = document.createElement('div');
+                successMessage.style.padding = '15px';
+                successMessage.style.backgroundColor = '#4caf50';
+                successMessage.style.color = 'white';
+                successMessage.style.borderRadius = '4px';
+                successMessage.style.marginTop = '15px';
+                successMessage.style.textAlign = 'center';
+                successMessage.style.fontWeight = '500';
+                successMessage.textContent = `Successfully subscribed with ${email}!`;
+                
+                // Add the message to the form
+                this.appendChild(successMessage);
+                
+                // Reset the form
+                this.reset();
+                
+                // Remove the message after 3 seconds
+                setTimeout(() => {
+                    successMessage.remove();
+                }, 3000);
+                
+                // In a real implementation, you would send this to a backend service
+                console.log(`Newsletter subscription for: ${email}`);
+            });
+        }
+
+        // Set up automatic refresh
+        function setupAutoRefresh() {
+            // Clear any existing interval
+            if (window.autoRefreshInterval) {
+                clearInterval(window.autoRefreshInterval);
+            }
+            
+            // Set new interval
+            window.autoRefreshInterval = setInterval(() => {
+                loadAllNews();
+            }, config.refreshInterval * 60 * 1000);
+        }
+
+        // Load all news content
+        function loadAllNews() {
+            // Show loading spinners
+            showLoading();
+            
+            // Hide error message
+            errorMessage.style.display = 'none';
+            
+            // Load featured article
+            loadFeaturedArticle();
+            
+            // Load article grid
+            loadArticles();
+            
+            // Load trending topics
+            loadTrendingTopics();
+            
+            // Load breaking news
+            loadBreakingNews();
+        }
+
+        // Show loading spinners
+        function showLoading() {
+            // Featured article loading
+            featuredArticle.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+            
+            // Article grid loading
+            articleGrid.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+            
+            // Trending list loading
+            trendingList.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner" style="width: 40px; height: 40px;"></div>
+                </div>
+            `;
+        }
+
+        // Show error message
+        function showError() {
+            errorMessage.style.display = 'block';
+            
+            // Clear loading spinners
+            featuredArticle.innerHTML = '<p>Failed to load featured article.</p>';
+            articleGrid.innerHTML = '<p>Failed to load articles.</p>';
+            trendingList.innerHTML = '<p>Failed to load trending topics.</p>';
+        }
+
+        // Load featured article
+        async function loadFeaturedArticle() {
+            try {
+                // Try to get from NewsAPI first
+                const featured = await fetchFromNewsAPI('top-headlines', 1);
+                
+                if (featured && featured.length > 0) {
+                    const article = featured[0];
+                    featuredArticle.innerHTML = `
+                        <img src="${article.urlToImage || 'https://picsum.photos/seed/featured/800/450.jpg'}" alt="${article.title}">
+                        <div class="featured-article-content">
+                            <div class="article-category">${article.category || 'General'}</div>
+                            <h2>${article.title}</h2>
+                            <div class="article-meta">
+                                <span><i class="far fa-clock"></i> ${formatDate(article.publishedAt)}</span>
+                                <span><i class="far fa-user"></i> ${article.source.name}</span>
+                                <span><i class="far fa-comment"></i> ${Math.floor(Math.random() * 100)} comments</span>
+                            </div>
+                            <p>${article.description || 'No description available.'}</p>
+                            <a href="${article.url}" target="_blank" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                            ${article.source.name ? `<div class="source-attribution">Source: ${article.source.name}</div>` : ''}
+                        </div>
+                    `;
+                } else {
+                    // Fallback to RSS or sample data
+                    featuredArticle.innerHTML = `
+                        <img src="https://picsum.photos/seed/featured/800/450.jpg" alt="Featured Article">
+                        <div class="featured-article-content">
+                            <div class="article-category">Technology</div>
+                            <h2>Automated News Systems Transforming Digital Media</h2>
+                            <div class="article-meta">
+                                <span><i class="far fa-clock"></i> 2 hours ago</span>
+                                <span><i class="far fa-user"></i> AutoNews System</span>
+                                <span><i class="far fa-comment"></i> 24 comments</span>
+                            </div>
+                            <p>Advanced automation technologies are revolutionizing how news is gathered, processed, and delivered to audiences worldwide.</p>
+                            <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading featured article:', error);
+                showError();
+            }
+        }
+
+        // Load articles
+        async function loadArticles() {
+            try {
+                // Try to get from NewsAPI first
+                const articles = await fetchFromNewsAPI('top-headlines', 6);
+                
+                if (articles && articles.length > 0) {
+                    renderArticles(articles);
+                } else {
+                    // Fallback to RSS or sample data
+                    const sampleArticles = generateSampleArticles(6);
+                    renderArticles(sampleArticles);
+                }
+            } catch (error) {
+                console.error('Error loading articles:', error);
+                showError();
+            }
+        }
+
+        // Load trending topics
+        async function loadTrendingTopics() {
+            try {
+                // Try to get from NewsAPI first
+                const trending = await fetchFromNewsAPI('top-headlines', 5, 'general');
+                
+                if (trending && trending.length > 0) {
+                    renderTrendingTopics(trending);
+                } else {
+                    // Fallback to sample data
+                    const sampleTrending = generateSampleTrending();
+                    renderTrendingTopics(sampleTrending);
+                }
+            } catch (error) {
+                console.error('Error loading trending topics:', error);
+                showError();
+            }
+        }
+
+        // Load breaking news
+        async function loadBreakingNews() {
+            try {
+                // Try to get from NewsAPI first
+                const breaking = await fetchFromNewsAPI('top-headlines', 5);
+                
+                if (breaking && breaking.length > 0) {
+                    updateBreakingNewsTicker(breaking);
+                } else {
+                    // Fallback to sample data
+                    updateBreakingNewsTicker(null);
+                }
+            } catch (error) {
+                console.error('Error loading breaking news:', error);
+                // Use sample data as fallback
+                updateBreakingNewsTicker(null);
+            }
+        }
+
+        // Fetch from NewsAPI
+        async function fetchFromNewsAPI(endpoint, pageSize = 5, category = null) {
+            // Use demo key if no key is provided
+            const apiKey = config.apiKey || 'demo-key';
+            
+            let url = `https://newsapi.org/v2/${endpoint}?apiKey=${apiKey}&pageSize=${pageSize}&country=${config.country}`;
+            
+            if (category && category !== 'all') {
+                url += `&category=${category}`;
+            }
+            
+            if (config.currentCategory && config.currentCategory !== 'all') {
+                url += `&category=${config.currentCategory}`;
+            }
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data.status === 'ok' && data.articles) {
+                    // Add category to each article
+                    return data.articles.map(article => ({
+                        ...article,
+                        category: category || getCategoryFromUrl(article.url) || 'General'
+                    }));
+                } else {
+                    console.error('NewsAPI error:', data);
+                    return null;
+                }
+            } catch (error) {
+                console.error('Error fetching from NewsAPI:', error);
+                return null;
+            }
+        }
+
+        // Fetch from RSS feeds
+        async function fetchFromRSS() {
+            // In a real implementation, you would use an RSS parser library or a CORS proxy
+            // For this example, we'll return sample data
+            return generateSampleArticles(6);
+        }
+
+        // Get category from URL
+        function getCategoryFromUrl(url) {
+            if (!url) return null;
+            
+            const lowerUrl = url.toLowerCase();
+            if (lowerUrl.includes('polit')) return 'Politics';
+            if (lowerUrl.includes('tech') || lowerUrl.includes('scienc')) return 'Technology';
+            if (lowerUrl.includes('busi') || lowerUrl.includes('econom')) return 'Business';
+            if (lowerUrl.includes('sport')) return 'Sports';
+            if (lowerUrl.includes('health')) return 'Health';
+            if (lowerUrl.includes('enter')) return 'Entertainment';
+            
+            return null;
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            if (!dateString) return 'Unknown date';
+            
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffMs = now - date;
+            const diffMins = Math.floor(diffMs / 60000);
+            const diffHours = Math.floor(diffMs / 3600000);
+            const diffDays = Math.floor(diffMs / 86400000);
+            
+            if (diffMins < 60) return `${diffMins} minutes ago`;
+            if (diffHours < 24) return `${diffHours} hours ago`;
+            if (diffDays < 7) return `${diffDays} days ago`;
+            
+            return date.toLocaleDateString();
+        }
+
+        // Render articles
+        function renderArticles(articles) {
+            articleGrid.innerHTML = '';
+            
+            articles.forEach(article => {
+                const articleCard = document.createElement('div');
+                articleCard.className = 'article-card';
+                articleCard.innerHTML = `
+                    <img src="${article.urlToImage || `https://picsum.photos/seed/${article.title}/400/250.jpg`}" alt="${article.title}">
+                    <div class="article-card-content">
+                        <div class="article-category">${article.category || 'General'}</div>
+                        <h3>${article.title}</h3>
+                        <p>${article.description || 'No description available.'}</p>
+                        <div class="article-meta">
+                            <span><i class="far fa-clock"></i> ${formatDate(article.publishedAt)}</span>
+                            <span><i class="far fa-comment"></i> ${Math.floor(Math.random() * 100)} comments</span>
+                        </div>
+                        <a href="${article.url}" target="_blank" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
+                        ${article.source && article.source.name ? `<div class="source-attribution">Source: ${article.source.name}</div>` : ''}
+                    </div>
+                `;
+                articleGrid.appendChild(articleCard);
+            });
+        }
+
+        // Render trending topics
+        function renderTrendingTopics(articles) {
+            trendingList.innerHTML = '';
+            
+            articles.forEach((article, index) => {
+                const listItem = document.createElement('li');
+                listItem.innerHTML = `
+                    <div class="trending-number">${index + 1}</div>
+                    <div>${article.title}</div>
+                `;
+                trendingList.appendChild(listItem);
+            });
+        }
+
+        // Update breaking news ticker
+        function updateBreakingNewsTicker(articles) {
+            let newsText;
+            
+            if (articles && articles.length > 0) {
+                newsText = articles.map(article => article.title).join(' • ');
+            } else {
+                // Fallback breaking news
+                newsText = 'Breaking: Automated news system successfully deployed globally • ' +
+                          'New AI technology revolutionizes content creation • ' +
+                          'Major tech company announces breakthrough in automated journalism • ' +
+                          'Global markets respond positively to automation news';
+            }
+            
+            breakingNewsTicker.textContent = newsText;
+        }
+
+        // Filter by category
+        function filterByCategory(category) {
+            config.currentCategory = category;
+            loadAllNews();
+        }
+
+        // Generate sample articles (fallback)
+        function generateSampleArticles(count) {
+            const categories = ['Politics', 'Technology', 'Business', 'Entertainment', 'Sports', 'Health', 'Science', 'World'];
+            const articles = [];
+            
+            for (let i = 0; i < count; i++) {
+                const category = categories[Math.floor(Math.random() * categories.length)];
+                const id = Math.random().toString(36).substring(2, 9);
+                
+                articles.push({
+                    id: id,
+                    title: `Breaking: ${category} News ${i + 1} - Major Development Announced`,
+                    description: 'This is a sample news excerpt about a recent development in the news. The full article would contain more detailed information about this breaking story.',
+                    category: category,
+                    urlToImage: `https://picsum.photos/seed/${id}/400/250.jpg`,
+                    publishedAt: new Date(Date.now() - Math.floor(Math.random() * 86400000)).toISOString(),
+                    url: '#',
+                    source: { name: 'AutoNews System' }
+                });
+            }
+            
+            return articles;
+        }
+
+        // Generate sample trending topics (fallback)
+        function generateSampleTrending() {
+            const topics = [
+                'AI Automation',
+                'Global Markets',
+                'Tech Innovation',
+                'Climate Summit',
+                'Space Exploration',
+                'Digital Currency',
+                'Healthcare Reform',
+                'Election Updates'
+            ];
+            
+            return topics.map((topic, index) => ({
+                title: topic,
+                id: Math.random().toString(36).substring(2, 9)
+            }));
+        }
+    </script>
+</body>
+</html>
