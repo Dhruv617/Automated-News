@@ -215,15 +215,119 @@
             margin-bottom: 20px;
             font-size: 0.95rem;
             color: #757575;
+            flex-wrap: wrap;
         }
         .article-meta span {
             margin-right: 20px;
+            margin-bottom: 10px;
             display: flex;
             align-items: center;
         }
         .article-meta i {
             margin-right: 8px;
             color: var(--secondary-color);
+        }
+        .read-aloud-btn {
+            background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            margin-left: auto;
+        }
+        .read-aloud-btn i {
+            margin-right: 8px;
+        }
+        .read-aloud-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        /* News Carousel */
+        .news-carousel {
+            margin-bottom: 40px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            position: relative;
+            height: 350px;
+        }
+        .carousel-container {
+            display: flex;
+            transition: transform 0.5s ease;
+            height: 100%;
+        }
+        .carousel-item {
+            min-width: 100%;
+            position: relative;
+            height: 100%;
+        }
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+            padding: 30px 20px 20px;
+        }
+        .carousel-caption h3 {
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+        }
+        .carousel-controls {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+            z-index: 10;
+        }
+        .carousel-control {
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 0 10px;
+            transition: all 0.3s ease;
+        }
+        .carousel-control:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+        .carousel-indicators {
+            position: absolute;
+            bottom: 15px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        .carousel-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: rgba(255,255,255,0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .carousel-indicator.active {
+            background-color: white;
         }
         /* Article Grid */
         .article-grid {
@@ -329,35 +433,58 @@
             margin-right: 10px;
             color: var(--accent-color);
         }
+        /* Enhanced Trending List */
         .trending-list {
             list-style: none;
         }
-        .trending-list li {
-            padding: 15px 0;
-            border-bottom: 1px solid var(--border-color);
+        .trending-item {
             display: flex;
-            align-items: flex-start;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
+            background-color: #fff;
+            border: 1px solid var(--border-color);
         }
-        .trending-list li:hover {
-            padding-left: 10px;
-        }
-        .trending-list li:last-child {
-            border-bottom: none;
+        .trending-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 15px rgba(0,0,0,0.1);
         }
         .trending-number {
             background: linear-gradient(135deg, var(--secondary-color), var(--accent-color));
             color: white;
-            width: 30px;
-            height: 30px;
+            width: 50px;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
-            border-radius: 50%;
-            margin-right: 15px;
             font-weight: bold;
+            font-size: 1.2rem;
             flex-shrink: 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        .trending-content {
+            padding: 15px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .trending-title {
+            font-weight: 500;
+            margin-bottom: 5px;
+            color: var(--text-color);
+            line-height: 1.3;
+        }
+        .trending-meta {
+            font-size: 0.85rem;
+            color: #757575;
+            display: flex;
+            align-items: center;
+        }
+        .trending-meta i {
+            margin-right: 5px;
+            color: var(--secondary-color);
         }
         /* Categories */
         .category-list {
@@ -589,6 +716,18 @@
             font-style: italic;
             margin-top: 10px;
         }
+        /* Text-to-speech indicator */
+        .speaking-indicator {
+            display: inline-flex;
+            align-items: center;
+            margin-left: 10px;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            animation: pulse 1.5s infinite;
+        }
+        .speaking-indicator i {
+            margin-right: 5px;
+        }
         /* Responsive Design */
         @media (max-width: 992px) {
             .main-content {
@@ -597,6 +736,10 @@
             
             .featured-article img {
                 height: 350px;
+            }
+            
+            .news-carousel {
+                height: 300px;
             }
         }
         @media (max-width: 768px) {
@@ -637,6 +780,14 @@
             .config-panel {
                 width: 90%;
                 right: 5%;
+            }
+            
+            .news-carousel {
+                height: 250px;
+            }
+            
+            .carousel-caption h3 {
+                font-size: 1.4rem;
             }
         }
     </style>
@@ -700,6 +851,25 @@
                         <div class="loading-spinner"></div>
                     </div>
                 </div>
+                
+                <!-- News Carousel -->
+                <div class="news-carousel" id="news-carousel">
+                    <div class="carousel-container" id="carousel-container">
+                        <!-- Carousel items will be loaded here -->
+                    </div>
+                    <div class="carousel-controls">
+                        <button class="carousel-control" id="carousel-prev">
+                            <i class="fas fa-chevron-left"></i>
+                        </button>
+                        <button class="carousel-control" id="carousel-next">
+                            <i class="fas fa-chevron-right"></i>
+                        </button>
+                    </div>
+                    <div class="carousel-indicators" id="carousel-indicators">
+                        <!-- Indicators will be loaded here -->
+                    </div>
+                </div>
+                
                 <!-- Google Ad - In Content -->
                 <div class="ad-in-content">
                     <div class="ad-placeholder">
@@ -823,6 +993,22 @@
             <input type="text" id="news-api-key" placeholder="Enter your API key">
         </div>
         <div class="form-group">
+            <label for="adsense-client">AdSense Client ID:</label>
+            <input type="text" id="adsense-client" placeholder="ca-pub-XXXXXXXXXXXXXXXX">
+        </div>
+        <div class="form-group">
+            <label for="adsense-slot-header">Ad Slot - Header:</label>
+            <input type="text" id="adsense-slot-header" placeholder="XXXXXXXXXX">
+        </div>
+        <div class="form-group">
+            <label for="adsense-slot-content">Ad Slot - Content:</label>
+            <input type="text" id="adsense-slot-content" placeholder="XXXXXXXXXX">
+        </div>
+        <div class="form-group">
+            <label for="adsense-slot-sidebar">Ad Slot - Sidebar:</label>
+            <input type="text" id="adsense-slot-sidebar" placeholder="XXXXXXXXXX">
+        </div>
+        <div class="form-group">
             <label for="refresh-interval">Refresh Interval (minutes):</label>
             <select id="refresh-interval">
                 <option value="5">5 minutes</option>
@@ -901,9 +1087,26 @@
                 'http://rss.cnn.com/rss/cnn_topstories.rss',
                 'https://feeds.reuters.com/reuters/topNews',
                 'https://www.theguardian.com/international/rss'
-            ]
+            ],
+            adsense: {
+                client: 'ca-pub-XXXXXXXXXXXXXXXX',
+                slots: {
+                    header: 'XXXXXXXXXX',
+                    content: 'XXXXXXXXXX',
+                    sidebar: 'XXXXXXXXXX'
+                }
+            }
         };
-
+        
+        // Text-to-speech
+        let speechSynthesis = window.speechSynthesis;
+        let currentUtterance = null;
+        
+        // Carousel variables
+        let carouselIndex = 0;
+        let carouselItems = [];
+        let carouselInterval = null;
+        
         // DOM Elements
         const featuredArticle = document.getElementById('featured-article');
         const articleGrid = document.getElementById('article-grid');
@@ -913,7 +1116,11 @@
         const automationBadge = document.getElementById('automation-badge');
         const configPanel = document.getElementById('config-panel');
         const newsletterForm = document.getElementById('newsletter-form');
-
+        const carouselContainer = document.getElementById('carousel-container');
+        const carouselIndicators = document.getElementById('carousel-indicators');
+        const carouselPrev = document.getElementById('carousel-prev');
+        const carouselNext = document.getElementById('carousel-next');
+        
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             // Load saved settings
@@ -928,7 +1135,7 @@
             // Set up automatic refresh
             setupAutoRefresh();
         });
-
+        
         // Load settings from localStorage
         function loadSettings() {
             const savedSettings = localStorage.getItem('autonews-config');
@@ -938,14 +1145,52 @@
                 
                 // Update UI with loaded settings
                 document.getElementById('news-api-key').value = config.apiKey || '';
+                document.getElementById('adsense-client').value = config.adsense.client || '';
+                document.getElementById('adsense-slot-header').value = config.adsense.slots.header || '';
+                document.getElementById('adsense-slot-content').value = config.adsense.slots.content || '';
+                document.getElementById('adsense-slot-sidebar').value = config.adsense.slots.sidebar || '';
                 document.getElementById('refresh-interval').value = config.refreshInterval;
                 document.getElementById('country').value = config.country;
+                
+                // Update AdSense ads
+                updateAdSenseAds();
             }
         }
-
+        
+        // Update AdSense ads with saved configuration
+        function updateAdSenseAds() {
+            // Update header ad
+            const headerAd = document.querySelector('.ad-header ins');
+            if (headerAd && config.adsense.client && config.adsense.slots.header) {
+                headerAd.setAttribute('data-ad-client', config.adsense.client);
+                headerAd.setAttribute('data-ad-slot', config.adsense.slots.header);
+            }
+            
+            // Update content ad
+            const contentAd = document.querySelector('.ad-in-content ins');
+            if (contentAd && config.adsense.client && config.adsense.slots.content) {
+                contentAd.setAttribute('data-ad-client', config.adsense.client);
+                contentAd.setAttribute('data-ad-slot', config.adsense.slots.content);
+            }
+            
+            // Update sidebar ad
+            const sidebarAd = document.querySelector('.ad-sidebar ins');
+            if (sidebarAd && config.adsense.client && config.adsense.slots.sidebar) {
+                sidebarAd.setAttribute('data-ad-client', config.adsense.client);
+                sidebarAd.setAttribute('data-ad-slot', config.adsense.slots.sidebar);
+            }
+            
+            // Reload ads
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        }
+        
         // Save settings to localStorage
         function saveSettings() {
             config.apiKey = document.getElementById('news-api-key').value;
+            config.adsense.client = document.getElementById('adsense-client').value;
+            config.adsense.slots.header = document.getElementById('adsense-slot-header').value;
+            config.adsense.slots.content = document.getElementById('adsense-slot-content').value;
+            config.adsense.slots.sidebar = document.getElementById('adsense-slot-sidebar').value;
             config.refreshInterval = parseInt(document.getElementById('refresh-interval').value);
             config.country = document.getElementById('country').value;
             
@@ -954,13 +1199,16 @@
             // Hide config panel
             configPanel.style.display = 'none';
             
+            // Update AdSense ads
+            updateAdSenseAds();
+            
             // Reload news with new settings
             loadAllNews();
             
             // Reset auto refresh with new interval
             setupAutoRefresh();
         }
-
+        
         // Set up event listeners
         function setupEventListeners() {
             // Navigation links
@@ -1006,6 +1254,10 @@
                 configPanel.style.display = 'none';
                 // Reset form to current values
                 document.getElementById('news-api-key').value = config.apiKey || '';
+                document.getElementById('adsense-client').value = config.adsense.client || '';
+                document.getElementById('adsense-slot-header').value = config.adsense.slots.header || '';
+                document.getElementById('adsense-slot-content').value = config.adsense.slots.content || '';
+                document.getElementById('adsense-slot-sidebar').value = config.adsense.slots.sidebar || '';
                 document.getElementById('refresh-interval').value = config.refreshInterval;
                 document.getElementById('country').value = config.country;
             });
@@ -1040,8 +1292,23 @@
                 // In a real implementation, you would send this to a backend service
                 console.log(`Newsletter subscription for: ${email}`);
             });
+            
+            // Carousel controls
+            carouselPrev.addEventListener('click', function() {
+                if (carouselItems.length > 0) {
+                    carouselIndex = (carouselIndex - 1 + carouselItems.length) % carouselItems.length;
+                    updateCarousel();
+                }
+            });
+            
+            carouselNext.addEventListener('click', function() {
+                if (carouselItems.length > 0) {
+                    carouselIndex = (carouselIndex + 1) % carouselItems.length;
+                    updateCarousel();
+                }
+            });
         }
-
+        
         // Set up automatic refresh
         function setupAutoRefresh() {
             // Clear any existing interval
@@ -1054,7 +1321,7 @@
                 loadAllNews();
             }, config.refreshInterval * 60 * 1000);
         }
-
+        
         // Load all news content
         function loadAllNews() {
             // Show loading spinners
@@ -1074,8 +1341,11 @@
             
             // Load breaking news
             loadBreakingNews();
+            
+            // Load news carousel
+            loadNewsCarousel();
         }
-
+        
         // Show loading spinners
         function showLoading() {
             // Featured article loading
@@ -1098,8 +1368,16 @@
                     <div class="loading-spinner" style="width: 40px; height: 40px;"></div>
                 </div>
             `;
+            
+            // Carousel loading
+            carouselContainer.innerHTML = `
+                <div class="loading-container">
+                    <div class="loading-spinner"></div>
+                </div>
+            `;
+            carouselIndicators.innerHTML = '';
         }
-
+        
         // Show error message
         function showError() {
             errorMessage.style.display = 'block';
@@ -1108,8 +1386,9 @@
             featuredArticle.innerHTML = '<p>Failed to load featured article.</p>';
             articleGrid.innerHTML = '<p>Failed to load articles.</p>';
             trendingList.innerHTML = '<p>Failed to load trending topics.</p>';
+            carouselContainer.innerHTML = '<p>Failed to load news carousel.</p>';
         }
-
+        
         // Load featured article
         async function loadFeaturedArticle() {
             try {
@@ -1127,12 +1406,22 @@
                                 <span><i class="far fa-clock"></i> ${formatDate(article.publishedAt)}</span>
                                 <span><i class="far fa-user"></i> ${article.source.name}</span>
                                 <span><i class="far fa-comment"></i> ${Math.floor(Math.random() * 100)} comments</span>
+                                <button class="read-aloud-btn" data-text="${article.title}. ${article.description || ''}">
+                                    <i class="fas fa-volume-up"></i> Read Aloud
+                                </button>
                             </div>
                             <p>${article.description || 'No description available.'}</p>
                             <a href="${article.url}" target="_blank" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
                             ${article.source.name ? `<div class="source-attribution">Source: ${article.source.name}</div>` : ''}
                         </div>
                     `;
+                    
+                    // Add event listener to read aloud button
+                    const readAloudBtn = featuredArticle.querySelector('.read-aloud-btn');
+                    readAloudBtn.addEventListener('click', function() {
+                        const text = this.getAttribute('data-text');
+                        readTextAloud(text, this);
+                    });
                 } else {
                     // Fallback to RSS or sample data
                     featuredArticle.innerHTML = `
@@ -1144,18 +1433,109 @@
                                 <span><i class="far fa-clock"></i> 2 hours ago</span>
                                 <span><i class="far fa-user"></i> AutoNews System</span>
                                 <span><i class="far fa-comment"></i> 24 comments</span>
+                                <button class="read-aloud-btn" data-text="Automated News Systems Transforming Digital Media. Advanced automation technologies are revolutionizing how news is gathered, processed, and delivered to audiences worldwide.">
+                                    <i class="fas fa-volume-up"></i> Read Aloud
+                                </button>
                             </div>
                             <p>Advanced automation technologies are revolutionizing how news is gathered, processed, and delivered to audiences worldwide.</p>
                             <a href="#" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
                         </div>
                     `;
+                    
+                    // Add event listener to read aloud button
+                    const readAloudBtn = featuredArticle.querySelector('.read-aloud-btn');
+                    readAloudBtn.addEventListener('click', function() {
+                        const text = this.getAttribute('data-text');
+                        readTextAloud(text, this);
+                    });
                 }
             } catch (error) {
                 console.error('Error loading featured article:', error);
                 showError();
             }
         }
-
+        
+        // Load news carousel
+        async function loadNewsCarousel() {
+            try {
+                // Try to get from NewsAPI first
+                const carouselArticles = await fetchFromNewsAPI('top-headlines', 5);
+                
+                if (carouselArticles && carouselArticles.length > 0) {
+                    carouselItems = carouselArticles;
+                    renderCarousel();
+                } else {
+                    // Fallback to sample data
+                    carouselItems = generateSampleArticles(5);
+                    renderCarousel();
+                }
+            } catch (error) {
+                console.error('Error loading news carousel:', error);
+                // Fallback to sample data
+                carouselItems = generateSampleArticles(5);
+                renderCarousel();
+            }
+        }
+        
+        // Render carousel
+        function renderCarousel() {
+            carouselContainer.innerHTML = '';
+            carouselIndicators.innerHTML = '';
+            
+            carouselItems.forEach((item, index) => {
+                // Create carousel item
+                const carouselItem = document.createElement('div');
+                carouselItem.className = 'carousel-item';
+                carouselItem.innerHTML = `
+                    <img src="${item.urlToImage || `https://picsum.photos/seed/${item.id}/800/350.jpg`}" alt="${item.title}">
+                    <div class="carousel-caption">
+                        <h3>${item.title}</h3>
+                        <p>${item.description || 'No description available.'}</p>
+                    </div>
+                `;
+                carouselContainer.appendChild(carouselItem);
+                
+                // Create indicator
+                const indicator = document.createElement('div');
+                indicator.className = `carousel-indicator ${index === 0 ? 'active' : ''}`;
+                indicator.addEventListener('click', () => {
+                    carouselIndex = index;
+                    updateCarousel();
+                });
+                carouselIndicators.appendChild(indicator);
+            });
+            
+            // Start auto rotation
+            startCarouselAutoRotation();
+        }
+        
+        // Update carousel
+        function updateCarousel() {
+            if (carouselItems.length === 0) return;
+            
+            // Update carousel position
+            carouselContainer.style.transform = `translateX(-${carouselIndex * 100}%)`;
+            
+            // Update indicators
+            document.querySelectorAll('.carousel-indicator').forEach((indicator, index) => {
+                indicator.classList.toggle('active', index === carouselIndex);
+            });
+        }
+        
+        // Start carousel auto rotation
+        function startCarouselAutoRotation() {
+            // Clear existing interval
+            if (carouselInterval) {
+                clearInterval(carouselInterval);
+            }
+            
+            // Set new interval
+            carouselInterval = setInterval(() => {
+                carouselIndex = (carouselIndex + 1) % carouselItems.length;
+                updateCarousel();
+            }, 5000);
+        }
+        
         // Load articles
         async function loadArticles() {
             try {
@@ -1174,7 +1554,7 @@
                 showError();
             }
         }
-
+        
         // Load trending topics
         async function loadTrendingTopics() {
             try {
@@ -1193,7 +1573,7 @@
                 showError();
             }
         }
-
+        
         // Load breaking news
         async function loadBreakingNews() {
             try {
@@ -1212,7 +1592,7 @@
                 updateBreakingNewsTicker(null);
             }
         }
-
+        
         // Fetch from NewsAPI
         async function fetchFromNewsAPI(endpoint, pageSize = 5, category = null) {
             // Use demo key if no key is provided
@@ -1236,7 +1616,8 @@
                     // Add category to each article
                     return data.articles.map(article => ({
                         ...article,
-                        category: category || getCategoryFromUrl(article.url) || 'General'
+                        category: category || getCategoryFromUrl(article.url) || 'General',
+                        id: Math.random().toString(36).substring(2, 9)
                     }));
                 } else {
                     console.error('NewsAPI error:', data);
@@ -1247,14 +1628,14 @@
                 return null;
             }
         }
-
+        
         // Fetch from RSS feeds
         async function fetchFromRSS() {
             // In a real implementation, you would use an RSS parser library or a CORS proxy
             // For this example, we'll return sample data
             return generateSampleArticles(6);
         }
-
+        
         // Get category from URL
         function getCategoryFromUrl(url) {
             if (!url) return null;
@@ -1269,7 +1650,7 @@
             
             return null;
         }
-
+        
         // Format date
         function formatDate(dateString) {
             if (!dateString) return 'Unknown date';
@@ -1287,7 +1668,7 @@
             
             return date.toLocaleDateString();
         }
-
+        
         // Render articles
         function renderArticles(articles) {
             articleGrid.innerHTML = '';
@@ -1296,7 +1677,7 @@
                 const articleCard = document.createElement('div');
                 articleCard.className = 'article-card';
                 articleCard.innerHTML = `
-                    <img src="${article.urlToImage || `https://picsum.photos/seed/${article.title}/400/250.jpg`}" alt="${article.title}">
+                    <img src="${article.urlToImage || `https://picsum.photos/seed/${article.id}/400/250.jpg`}" alt="${article.title}">
                     <div class="article-card-content">
                         <div class="article-category">${article.category || 'General'}</div>
                         <h3>${article.title}</h3>
@@ -1304,29 +1685,45 @@
                         <div class="article-meta">
                             <span><i class="far fa-clock"></i> ${formatDate(article.publishedAt)}</span>
                             <span><i class="far fa-comment"></i> ${Math.floor(Math.random() * 100)} comments</span>
+                            <button class="read-aloud-btn" data-text="${article.title}. ${article.description || ''}">
+                                <i class="fas fa-volume-up"></i> Read
+                            </button>
                         </div>
                         <a href="${article.url}" target="_blank" class="read-more">Read More <i class="fas fa-arrow-right"></i></a>
                         ${article.source && article.source.name ? `<div class="source-attribution">Source: ${article.source.name}</div>` : ''}
                     </div>
                 `;
                 articleGrid.appendChild(articleCard);
+                
+                // Add event listener to read aloud button
+                const readAloudBtn = articleCard.querySelector('.read-aloud-btn');
+                readAloudBtn.addEventListener('click', function() {
+                    const text = this.getAttribute('data-text');
+                    readTextAloud(text, this);
+                });
             });
         }
-
+        
         // Render trending topics
         function renderTrendingTopics(articles) {
             trendingList.innerHTML = '';
             
             articles.forEach((article, index) => {
                 const listItem = document.createElement('li');
+                listItem.className = 'trending-item';
                 listItem.innerHTML = `
                     <div class="trending-number">${index + 1}</div>
-                    <div>${article.title}</div>
+                    <div class="trending-content">
+                        <div class="trending-title">${article.title}</div>
+                        <div class="trending-meta">
+                            <i class="far fa-clock"></i> ${formatDate(article.publishedAt)}
+                        </div>
+                    </div>
                 `;
                 trendingList.appendChild(listItem);
             });
         }
-
+        
         // Update breaking news ticker
         function updateBreakingNewsTicker(articles) {
             let newsText;
@@ -1343,13 +1740,13 @@
             
             breakingNewsTicker.textContent = newsText;
         }
-
+        
         // Filter by category
         function filterByCategory(category) {
             config.currentCategory = category;
             loadAllNews();
         }
-
+        
         // Generate sample articles (fallback)
         function generateSampleArticles(count) {
             const categories = ['Politics', 'Technology', 'Business', 'Entertainment', 'Sports', 'Health', 'Science', 'World'];
@@ -1373,7 +1770,7 @@
             
             return articles;
         }
-
+        
         // Generate sample trending topics (fallback)
         function generateSampleTrending() {
             const topics = [
@@ -1389,8 +1786,72 @@
             
             return topics.map((topic, index) => ({
                 title: topic,
-                id: Math.random().toString(36).substring(2, 9)
+                id: Math.random().toString(36).substring(2, 9),
+                publishedAt: new Date(Date.now() - Math.floor(Math.random() * 86400000)).toISOString()
             }));
+        }
+        
+        // Read text aloud
+        function readTextAloud(text, button) {
+            // Stop any current speech
+            if (speechSynthesis.speaking) {
+                speechSynthesis.cancel();
+                
+                // Remove speaking indicator if it exists
+                const existingIndicator = button.parentElement.querySelector('.speaking-indicator');
+                if (existingIndicator) {
+                    existingIndicator.remove();
+                }
+                
+                // Reset button text
+                if (button.classList.contains('read-aloud-btn')) {
+                    button.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+                } else {
+                    button.innerHTML = '<i class="fas fa-volume-up"></i> Read';
+                }
+                
+                return;
+            }
+            
+            // Create utterance
+            currentUtterance = new SpeechSynthesisUtterance(text);
+            currentUtterance.rate = 1;
+            currentUtterance.pitch = 1;
+            currentUtterance.volume = 1;
+            
+            // Add event listeners
+            currentUtterance.onstart = function() {
+                // Add speaking indicator
+                const indicator = document.createElement('span');
+                indicator.className = 'speaking-indicator';
+                indicator.innerHTML = '<i class="fas fa-volume-up"></i> Speaking...';
+                button.parentElement.appendChild(indicator);
+                
+                // Update button text
+                if (button.classList.contains('read-aloud-btn')) {
+                    button.innerHTML = '<i class="fas fa-stop"></i> Stop';
+                } else {
+                    button.innerHTML = '<i class="fas fa-stop"></i> Stop';
+                }
+            };
+            
+            currentUtterance.onend = function() {
+                // Remove speaking indicator
+                const indicator = button.parentElement.querySelector('.speaking-indicator');
+                if (indicator) {
+                    indicator.remove();
+                }
+                
+                // Reset button text
+                if (button.classList.contains('read-aloud-btn')) {
+                    button.innerHTML = '<i class="fas fa-volume-up"></i> Read Aloud';
+                } else {
+                    button.innerHTML = '<i class="fas fa-volume-up"></i> Read';
+                }
+            };
+            
+            // Speak the text
+            speechSynthesis.speak(currentUtterance);
         }
     </script>
 </body>
